@@ -1,1 +1,1 @@
-providers = ["...", "python", "php"]
+providers = ["...", "python"]
