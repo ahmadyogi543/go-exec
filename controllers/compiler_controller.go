@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/ahmadyogi543/go-exec/constants"
@@ -17,40 +18,46 @@ func MainCompiler(ctx *gin.Context) {
 }
 
 func ExecuteCompiler(ctx *gin.Context) {
-	var mainErr error
-	var codeRequest types.CodeRequest
-	ctx.BindJSON(&codeRequest)
+	APIKey := ctx.Request.Header.Get("x-api-key")
 
-	extension := constants.COMPILERS[codeRequest.Language].Extension
-	executable := constants.COMPILERS[codeRequest.Language].Executable
-
-	codePath, err := utils.CreateCode(codeRequest.Code, extension)
-	if err != nil {
-		mainErr = err
-	}
-
-	codeOutput, err := utils.ExecuteCode(codePath, codeRequest.Input, executable)
-	if err != nil {
-		mainErr = err
-	}
-
-	err = utils.RemoveFile(codePath)
-	if err != nil {
-		mainErr = err
-	}
-
-	if mainErr != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"status":  "error",
-			"message": "internal server error",
-		})
+	if APIKey != os.Getenv("API_KEY") {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"status": 401, "message": "authorization failed"})
 	} else {
-		ctx.JSON(http.StatusOK, gin.H{
-			"status":    "success",
-			"output":    codeOutput,
-			"language":  codeRequest.Language,
-			"timestamp": time.Now(),
-		})
+		var mainErr error
+		var codeRequest types.CodeRequest
+		ctx.BindJSON(&codeRequest)
+
+		extension := constants.COMPILERS[codeRequest.Language].Extension
+		executable := constants.COMPILERS[codeRequest.Language].Executable
+
+		codePath, err := utils.CreateCode(codeRequest.Code, extension)
+		if err != nil {
+			mainErr = err
+		}
+
+		codeOutput, err := utils.ExecuteCode(codePath, codeRequest.Input, executable)
+		if err != nil {
+			mainErr = err
+		}
+
+		err = utils.RemoveFile(codePath)
+		if err != nil {
+			mainErr = err
+		}
+
+		if mainErr != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"status":  "error",
+				"message": "internal server error",
+			})
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{
+				"status":    "success",
+				"output":    codeOutput,
+				"language":  codeRequest.Language,
+				"timestamp": time.Now(),
+			})
+		}
 	}
 }
 
