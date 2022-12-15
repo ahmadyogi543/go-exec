@@ -1,6 +1,6 @@
 FROM golang:alpine
 
-RUN apk update && apk add --no-cache git php python
+RUN apk update && apk add --no-cache git php python3
 
 WORKDIR /app
 
