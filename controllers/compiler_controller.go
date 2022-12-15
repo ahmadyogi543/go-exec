@@ -67,6 +67,6 @@ func ListCompiler(ctx *gin.Context) {
 
 func VersionCompiler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"version": "8.1.13",
+		"version": "8.1.10",
 	})
 }
