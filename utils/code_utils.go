@@ -22,31 +22,16 @@ func ExecuteCode(path string, input string, executable string) (string, error) {
 	var mainErr error
 	execCmd := exec.Command(executable, path)
 
-	execStdin, err := execCmd.StdinPipe()
-	if err != nil {
-		mainErr = err
-	}
-	execStdout, err := execCmd.StdoutPipe()
-	if err != nil {
-		mainErr = err
-	}
-	execStderr, err := execCmd.StderrPipe()
-	if err != nil {
-		mainErr = err
-	}
+	execStdin, _ := execCmd.StdinPipe()
+	execStdout, _ := execCmd.StdoutPipe()
+	execStderr, _ := execCmd.StderrPipe()
 
 	execCmd.Start()
 	execStdin.Write([]byte(input))
 	execStdin.Close()
 
-	stdOutOutput, err := (io.ReadAll(execStdout))
-	if err != nil {
-		mainErr = err
-	}
-	stdErrOutput, err := (io.ReadAll(execStderr))
-	if err != nil {
-		mainErr = err
-	}
+	stdOutOutput, _ := (io.ReadAll(execStdout))
+	stdErrOutput, _ := (io.ReadAll(execStderr))
 	execCmd.Wait()
 
 	codeOutput := string(stdOutOutput)
