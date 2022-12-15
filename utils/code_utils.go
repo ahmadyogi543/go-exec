@@ -39,9 +39,9 @@ func ExecuteCode(path string, input string, executable string) (string, error) {
 	if err != nil {
 		fmt.Println("Error di stderrput", err)
 	}
+	codeOutput := string(stdOutOutput)
 	execCmd.Wait()
 
-	codeOutput := string(stdOutOutput)
 	if string(stdErrOutput) != "" {
 		codeOutput = string(stdErrOutput)
 	}
