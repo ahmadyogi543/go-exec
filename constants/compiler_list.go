@@ -6,7 +6,7 @@ var COMPILERS map[string]types.Compiler = map[string]types.Compiler{
 	"py": {
 		Name:       "Python",
 		Extension:  "py",
-		Executable: "python",
+		Executable: "python3",
 		Version:    "3.10.8",
 	},
 	"php": {
