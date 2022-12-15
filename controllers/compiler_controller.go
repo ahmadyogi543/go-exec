@@ -29,15 +29,15 @@ func ExecuteCompiler(ctx *gin.Context) {
 		mainErr = err
 	}
 
-	codeOutput, err := utils.ExecuteCode(codePath, codeRequest.Input, executable)
-	if err != nil {
-		mainErr = err
-	}
+	codeOutput, _ := utils.ExecuteCode(codePath, codeRequest.Input, executable)
+	// if err != nil {
+	// 	mainErr = err
+	// }
 
-	err = utils.RemoveFile(codePath)
-	if err != nil {
-		mainErr = err
-	}
+	_ = utils.RemoveFile(codePath)
+	// if err != nil {
+	// 	mainErr = err
+	// }
 
 	if mainErr != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
