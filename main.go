@@ -8,7 +8,11 @@ import (
 
 func main() {
 	app := gin.Default()
-	app.Use(cors.Default())
+
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true
+	corsConfig.AllowHeaders = []string{"Origin", "X-Api-Key", "X-Requested-With", "Content-Type, Accept", "Authorization"}
+	app.Use(cors.New(corsConfig))
 	v1 := app.Group("/api/v1")
 
 	routes.Main(v1)

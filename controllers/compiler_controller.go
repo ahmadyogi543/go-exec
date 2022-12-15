@@ -18,7 +18,7 @@ func MainCompiler(ctx *gin.Context) {
 }
 
 func ExecuteCompiler(ctx *gin.Context) {
-	APIKey := ctx.Request.Header.Get("x-api-key")
+	APIKey := ctx.Request.Header.Get("X-Api-Key")
 
 	if APIKey != os.Getenv("API_KEY") {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"status": 401, "message": "authorization failed"})
