@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"io"
 	"os/exec"
 
@@ -22,16 +23,25 @@ func ExecuteCode(path string, input string, executable string) (string, error) {
 	var mainErr error
 	execCmd := exec.Command(executable, path)
 
-	execStdin, _ := execCmd.StdinPipe()
-	execStdout, _ := execCmd.StdoutPipe()
-	execStderr, _ := execCmd.StderrPipe()
+	execStdin, err := execCmd.StdinPipe()
+	if err != nil {
+		fmt.Println("Error di stdinpipe")
+	}
+	execStdout, err := execCmd.StdoutPipe()
+	if err != nil {
+		fmt.Println("Error di stdoutpipe")
+	}
+	execStderr, err := execCmd.StderrPipe()
+	if err != nil {
+		fmt.Println("Error di stderrpipe")
+	}
 
 	execCmd.Start()
 	execStdin.Write([]byte(input))
 	execStdin.Close()
 
-	stdOutOutput, _ := (io.ReadAll(execStdout))
-	stdErrOutput, _ := (io.ReadAll(execStderr))
+	stdOutOutput, _ := io.ReadAll(execStdout)
+	stdErrOutput, _ := io.ReadAll(execStderr)
 	execCmd.Wait()
 
 	codeOutput := string(stdOutOutput)
