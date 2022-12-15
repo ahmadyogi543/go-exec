@@ -21,9 +21,9 @@ func DeleteCode(path string) error {
 
 func ExecuteCode(path string, input string, executable string) (string, error) {
 	var mainErr error
-	execCmd := exec.Command(executable, path)
+	execCmd := exec.Command("echo", "$PATH")
 
-	// execStdin, _ := execCmd.StdinPipe()
+	execStdin, _ := execCmd.StdinPipe()
 	execStdout, _ := execCmd.StdoutPipe()
 	execStderr, _ := execCmd.StderrPipe()
 
@@ -31,8 +31,8 @@ func ExecuteCode(path string, input string, executable string) (string, error) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	// execStdin.Write([]byte(input))
-	// execStdin.Close()
+	execStdin.Write([]byte(input))
+	execStdin.Close()
 
 	stdOutOutput, _ := io.ReadAll(execStdout)
 	stdErrOutput, _ := io.ReadAll(execStderr)
