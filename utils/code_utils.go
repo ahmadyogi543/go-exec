@@ -21,7 +21,7 @@ func DeleteCode(path string) error {
 
 func ExecuteCode(path string, input string, executable string) (string, error) {
 	var mainErr error
-	execCmd := exec.Command("type", input)
+	execCmd := exec.Command(input)
 
 	execStdin, _ := execCmd.StdinPipe()
 	execStdout, _ := execCmd.StdoutPipe()
