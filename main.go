@@ -11,7 +11,13 @@ func main() {
 
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowAllOrigins = true
-	corsConfig.AllowHeaders = []string{"Origin", "X-Api-Key", "X-Requested-With", "Content-Type, Accept", "Authorization"}
+	corsConfig.AllowHeaders = []string{
+		"Origin",
+		"X-Api-Key",
+		"X-Requested-With",
+		"Content-Type, Accept",
+		"Authorization",
+	}
 	app.Use(cors.New(corsConfig))
 	v1 := app.Group("/api/v1")
 
